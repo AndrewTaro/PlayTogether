@@ -1,0 +1,537 @@
+<ui>
+	<block className="UIListPlayerContextMenu">
+		<bind name="primaryEntityDH" value="'entityAccountBattle'; CC.avatar; _playerId"/>
+		<bind name="watchDH" value="'name'; 						['']; 																entityAccountBattle.avatar.name"/>
+		<bind name="watchDH" value="'pureName'; 					['']; 																entityAccountBattle.avatar.pureName"/>
+		<bind name="watchDH" value="'isInSameDivisionOnStart';	['']; 																entityAccountBattle.divisionMember.isInSameDivisionOnStart"/>
+		<bind name="watchDH" value="'isInSameDivision'; 			['']; 																entityAccountBattle.divisionMember.isInSameDivision"/>
+		<bind name="watchDH" value="'isLeaver'; 					['entityAccountBattle.avatar.evIsLeaverChanged']; 					entityAccountBattle.avatar.isLeaver"/>
+		<bind name="watchDH" value="'division'; 					['entityAccountBattle.divisionMember.evDivisionChanged']; 			entityAccountBattle.divisionMember.division"/>
+		<bind name="watchDH" value="'inviteCooldown'; 			['entityAccountBattle.battleInvite.evInviteCooldownChanged']; 		entityAccountBattle.battleInvite.inviteCooldown"/>
+		<bind name="watchDH" value="'invitationsEnabled'; 		['entityAccountBattle.battleInvite.evInvitationsEnabledChanged']; 	entityAccountBattle.battleInvite.invitationsEnabled"/>
+		<bind name="watchDH" value="'relation'; 					['entityAccountBattle.relation.evChanged']; 						entityAccountBattle.relation.value"/>
+		<bind name="watchDH" value="'isAlive'; 					['entityAccountBattle.health.evIsAliveChanged']; 					entityAccountBattle.health.isAlive"/>
+		<bind name="primaryEntityDH" value="'playerVoiceChatEntity'; CC.playerVoiceState; pureName"/>
+		<bind name="watchDH" value="'isMuted'; 					['playerVoiceChatEntity.playerVoiceState.evIsMutedChanged']; 			playerVoiceChatEntity.playerVoiceState.isMuted"/>
+		<bind name="watch" value="'isInVoiceChat';	!!playerVoiceChatEntity.playerVoiceState"/>
+		<bind name="firstEntityDH" value="'battleDataEntity'; CC.battleData"/>
+		<bind name="watch" value="'battleType';	battleDataEntity.battleInfo.battleType"/>
+		<bind name="firstEntityDH" value="'selfPlayerEntity'; CC.accountSelf"/>
+		<bind name="watchDH" value="'divisionId'; ['selfPlayerEntity.divisionMember.evDivisionChanged']; selfPlayerEntity.divisionMember.divisionId"/>
+		<!--mod-->
+		<bind name="watch" value="'isInDivision'; selfPlayerEntity.hasComponent(CC.divisionMember)"/>
+		<bind name="watch" value="'isInDivision'; selfPlayerEntity.hasComponent(CC.divisionMember)"/>
+		<!--mod-->
+		<bind name="watchDH" value="'isSelfAlive'; ['selfPlayerEntity.health.evIsAliveChanged']; selfPlayerEntity.health.isAlive"/>
+		<bind name="watchDH" value="'isCommander'; ['selfPlayerEntity.divisionMember.evIsDivisionCommanderUpdated']; selfPlayerEntity.divisionMember.isDivisionCommander"/>
+		<bind name="watch" value="'isDynamicDivisionsEnabled';	isIn(battleType, SC.Common.BATTLE_TYPES.DYNAMIC_DIVISION_AVAILABLE)"/>
+		<bind name="primaryEntityDH" value="'dynamicDivisionEntity'; CC.division; divisionId"/>
+		<bind name="watchDH" value="'inPortParticipantsCount'; 		['dynamicDivisionEntity.division.evInPortParticipantsCountChanged']; dynamicDivisionEntity.division.inPortParticipantsCount"/>
+		<bind name="collectionDH" value="CC.dynamicDivisionMember; 'dynamicDivisionsByPrebattle'; 'byPreBattleId.' + divisionId"/>
+		<bind name="watch" value="'membersCount'; dynamicDivisionsByPrebattle.length"/>
+		<bind name="primaryEntityDH" value="'preBattlePlayerSimpleEntity'; CC.preBattlePlayerSimple; _playerId"/>
+		<bind name="watch" value="'isInvited'; preBattlePlayerSimpleEntity.hasComponent(CC.playerInvitedToPrebattleInfo)"/>
+		<bind name="primaryEntityDH" value="'voiceChatEnabledEntity'; CC.preference; 'sound.voice.chat.enabled'"/>
+		<bind name="watchDH" value="'voiceChatEnabled'; ['voiceChatEnabledEntity.preference.evValueChanged']; voiceChatEnabledEntity.preference.value"/>
+		<bind name="firstEntityDH" value="'evaluationLimits'; CC.evaluationLimitsInfo"/>
+		<bind name="watchDH" value="'evaluationLimitsComplain';	['evaluationLimits.evaluationLimitsInfo.evComplainChanged'];	evaluationLimits.evaluationLimitsInfo.complain"/>
+		<bind name="watchDH" value="'evaluationLimitsPraise';	['evaluationLimits.evaluationLimitsInfo.evPraiseChanged'];		evaluationLimits.evaluationLimitsInfo.praise"/>
+		<bind name="watchDH" value="'entityAccountBattleDbId'; [];  entityAccountBattle.accountSimple.dbId"/>
+		<bind name="primaryEntityDH" value="'playerEntity'; CC.accountSimple; _playerDbId ? _playerDbId : entityAccountBattleDbId"/>
+		<bind name="watchDH" value="'isSuspended'; ['playerEntity.accountSimple.evSuspendedChanged']; playerEntity.accountSimple.suspended"/>
+		<bind name="watchDH" value="'isPlayerMessagesMuted'; ['playerEntity.avatar.evMuteChanged']; playerEntity.avatar.mute"/>
+		<bind name="watchDH" value="'isBotAvatar'; []; playerEntity.avatar.isBot"/>
+		<bind name="watchDH" value="'accountDbId'; [];  playerEntity.accountSimple.dbId"/>
+		<bind name="watchDH" value="'groupIdsOfAccount'; ['playerEntity.elementInGroups.evGroupsChanged']; playerEntity.elementInGroups.groupIds"/>
+		<bind name="watchDH" value="'isIgnored';['playerEntity.contact.evIsIgnoredChanged']; !!playerEntity.contact.isIgnored"/>
+		<bind name="firstEntityDH" value="'chatEntity'; CC.chat"/>
+		<bind name="watchDH" value="'canAddGroupEntitiesId'; ['playerEntity.elementInGroups.evCanAddGroupEntitiesChanged', 'chatEntity.chat.evRosterChanged']; (playerEntity.elementInGroups) ? playerEntity.elementInGroups.canAddGroupEntitiesId : chatEntity.chat.canAddGroupEntitiesId"/>
+		<bind name="watchDH" value="'playerEntityId'; []; playerEntity.id"/>
+		<bind name="watch" value="'isInSameDivisionOnStart'; _isInPBS ? _isInSameDivisionOnStart : isInSameDivisionOnStart"/>
+		<bind name="watch" value="'isBot'; _isInPBS ? _isBot  : isBotAvatar"/>
+		<bind name="serverTime" value="'serverTime'"/>
+		<bind name="timeFormat" value="(inviteCooldown - serverTime); 'mm:ss'; 'cooldownTimeText'"/>
+		<bind name="watch" value="'isEnemyPlayer'; relation == 2 || _relation == 2"/>
+		<bind name="watch" value="'isFreePlacesInDivision'; (membersCount ? membersCount : 0) + (inPortParticipantsCount ? inPortParticipantsCount : 0) &lt; 3"/>
+		<!--mod-->
+		<bind name="watch" value="'invitationDisableReason'; 
+										_isInPBS ? 'no_reason'
+												 : 
+											isLeaver						? 'IDS_INVITATION_DISABLE_REASON_PLAYER_IS_OUT_OF_BATTLE':
+											division != 0					? 'IDS_INVITATION_DISABLE_REASON_ALREADY_IN_DIVISION' :
+											!isSelfAlive					? 'IDS_DIVISION_MANAGEMENT_LOCKED_FOR_DESTROYED' :
+											!isAlive						? 'IDS_INVITATION_DISABLE_REASON_DESTROYED' :
+											!isFreePlacesInDivision			? 'IDS_INVITATION_DISABLE_REASON_NO_FREE_PLACES' :
+											!invitationsEnabled				? 'IDS_INVITATION_DISABLE_REASON_INVITATIONS_DISABLED' :
+											inviteCooldown &gt; serverTime		? (tr('IDS_WAIT_TIMEOUT_TO_INVITE_TO_DIVISION')+' '+cooldownTimeText)
+																			: 'no_reason'"/>
+
+		<bind name="watch" value="'isDivisionControlsEnable';	
+												_isInPBS ? (
+															!isIgnored &amp;&amp;
+															!isBot &amp;&amp;
+															!isPlayerMessagesMuted &amp;&amp;
+															!isSuspended &amp;&amp;
+															(isInDivision ? isCommander : true)
+															)
+														 : (
+															isDynamicDivisionsEnabled &amp;&amp;
+															_isInPBS != true &amp;&amp;
+															!isEnemyPlayer &amp;&amp;
+															!isBot &amp;&amp;
+															(isCommander || !divisionId) &amp;&amp;
+															!isSuspended
+															)"/>
+		<!--mod-->
+		<bind name="watch" value="'canBeInChat';	((_battleType == SC.Common.BATTLE_TYPES.CLAN_BATTLE) &amp;&amp; voiceChatEnabled &amp;&amp; !(isEnemyPlayer)) ||
+								((isInSameDivision &amp;&amp; voiceChatEnabled) &amp;&amp; ((_battleType == SC.Common.BATTLE_TYPES.RANDOM_BATTLE) ||
+																						 (_battleType == SC.Common.BATTLE_TYPES.COOPERATIVE_BATTLE) ||
+																						 (_battleType == SC.Common.BATTLE_TYPES.PVE_BATTLE)))"/>
+		<block>
+			<styleClass value="$FullsizeAbsolute"/>
+			<bind name="instance" value="'MenuTooltipBackground'; {_isInBattle: _isBattleStats}"/>
+		</block>
+		<styleClass value="$DefaultMenuBehaviour"/>
+		<styleClass value="$ContextMenuDimentions"/>
+		<block>
+			<style>
+				<width value="100%"/>
+			</style>
+			<bind name="class" value="_isBattleStats ? '$ComplaintMenuListItemBattleMargins' : '$ComplaintMenuListItemPostbattleMargins'"/>
+			<block>
+				<bind name="visible" value="isDivisionControlsEnable"/>
+				<style>
+					<width value="100%"/>
+				</style>
+				<block>
+					<bind name="visible" value="isCommander &amp;&amp; isInSameDivision"/>
+					<style>
+						<width value="100%"/>
+					</style>
+					<bind name="alpha" value="isSelfAlive ? 1 : 0.5"/>
+					<block>
+						<styleClass value="$ContextMenuListItem"/>
+						<block className="MenuItem">
+							<styleClass value="$Fullsize"/>
+							<block className="dock_submenu_item" type="native">
+								<styleClass value="$FullsizeAbsolute"/>
+							</block>
+							<block type="text">
+								<styleClass value="$TextDefault"/>
+								<styleClass value="$MiddleVAligned"/>
+								<styleClass value="$ContextMenuListItemContent"/>
+								<bind name="text" value="'IDS_APPOINT_PLAYER_TO_COMMANDER'"/>
+								<bind name="name" value="'menu_item_' + _titleIds"/>
+							</block>
+						</block>
+						<bind name="action" value="'click'; 'changeCommander'; {playerId: _playerId, teamId:playerEntity.preBattlePlayerSimple.teamId}"/>
+					</block>
+					<block>
+						<styleClass value="$ContextMenuListItem"/>
+						<block className="MenuItem">
+							<styleClass value="$Fullsize"/>
+							<block className="dock_submenu_item" type="native">
+								<styleClass value="$FullsizeAbsolute"/>
+							</block>
+							<block type="text">
+								<styleClass value="$TextDefault"/>
+								<styleClass value="$MiddleVAligned"/>
+								<styleClass value="$ContextMenuListItemContent"/>
+								<bind name="text" value="'IDS_EXCLUDE_PLAYER_OUT_OF_DIVISION'"/>
+								<bind name="name" value="'menu_item_' + _titleIds"/>
+							</block>
+						</block>
+						<bind name="action" value="'click'; 'kickPlayerFromDivision'; {playerId: _playerId}"/>
+					</block>
+					<block>
+						<bind name="visible" value="!isSelfAlive"/>
+						<styleClass value="$FullsizeAbsolute"/>
+						<style>
+							<backgroundColor value="0x0100000"/>
+						</style>
+						<bind name="tooltip" value="'SimpleStatusTooltip'; !isSelfAlive ? {_text: tr('IDS_DIVISION_MANAGEMENT_LOCKED_FOR_DESTROYED'), _unifiedStatus: SC.Ui_styles.UNIFIED_STATUS.WARNING } : null"/>
+					</block>
+				</block>
+				<block>
+					<bind name="visible" value="!isInSameDivision"/>
+					<style>
+						<width value="100%"/>
+					</style>
+					<block>
+						<bind name="visible" value="!isInSameDivision &amp;&amp; !isInvited"/>
+						<bind name="style" value="'alpha'; (invitationDisableReason == 'no_reason') ? 1 : 0.5"/>
+						<bind name="tooltip" value="'SimpleStatusTooltip'; (invitationDisableReason != 'no_reason') ? {_text: invitationDisableReason, _unifiedStatus: SC.Ui_styles.UNIFIED_STATUS.ATTENTION } : null"/>
+						<style>
+							<backgroundColor value="0x01000000"/>
+						</style>
+						<styleClass value="$ContextMenuListItem"/>
+						<block>
+							<styleClass value="$Fullsize"/>
+							<bind name="style" value="'hitTest';  (invitationDisableReason == 'no_reason') ? true : false"/>
+							<block className="MenuItem">
+								<styleClass value="$Fullsize"/>
+								<block className="dock_submenu_item" type="native">
+									<styleClass value="$FullsizeAbsolute"/>
+								</block>
+								<block type="text">
+									<styleClass value="$TextDefault"/>
+									<styleClass value="$MiddleVAligned"/>
+									<styleClass value="$ContextMenuListItemContent"/>
+									<bind name="text" value="'IDS_INVITE_IN_DIVISION'"/>
+									<bind name="name" value="'menu_item_' + _titleIds"/>
+								</block>
+							</block>
+						</block>
+						<!--mod-->
+						<bind name="action" value="'click'; (invitationDisableReason == 'no_reason') ? 'inviteToDivision' : ''; {playerId: (_isInPBS ? _playerDbId : _playerId), playerName: name, inviteType: (_isInPBS ? SC.Pre_battle.PRE_BATTLE_INVITE_TYPE.COMMON : InviteType.COMMON) }"/>
+						<!--mod-->
+					</block>
+					<block>
+						<bind name="visible" value="isInvited"/>
+						<styleClass value="$ContextMenuListItem"/>
+						<block className="MenuItem">
+							<styleClass value="$Fullsize"/>
+							<block className="dock_submenu_item" type="native">
+								<styleClass value="$FullsizeAbsolute"/>
+							</block>
+							<block type="text">
+								<styleClass value="$TextDefault"/>
+								<styleClass value="$MiddleVAligned"/>
+								<styleClass value="$ContextMenuListItemContent"/>
+								<bind name="text" value="'IDS_RECALL_INVITATION'"/>
+								<bind name="name" value="'menu_item_' + _titleIds"/>
+							</block>
+						</block>
+						<bind name="action" value="'click'; 'revokeInvitationToDivision'; {id: preBattlePlayerSimpleEntity.preBattlePlayerSimple.id}"/>
+					</block>
+				</block>
+				<block>
+					<style>
+						<width value="100%"/>
+						<marginTop value="3px"/>
+						<marginBottom value="2px"/>
+						<marginLeft value="-2px"/>
+						<marginRight value="-2px"/>
+					</style>
+					<block className="HorizontalDivider">
+						<styleClass value="$PxHorizontalCorrection"/>
+						<style>
+							<width value="100%"/>
+							<height value="2px"/>
+							<backgroundSize value="fill"/>
+							<marginTop value="1px"/>
+							<backgroundImage value="url:../service_kit/dividers/divider_h.png"/>
+						</style>
+					</block>
+				</block>
+			</block>
+			<block>
+				<style>
+					<width value="100%"/>
+				</style>
+				<bind name="visible" value="!(_isBattleLoading) &amp;&amp; !(isBot) &amp;&amp; !(isSuspended)"/>
+				<block>
+					<style>
+						<width value="100%"/>
+					</style>
+					<bind name="name" value="'id_complain'"/>
+					<bind name="instance" value="'PlayerMenuItemExpanded'; 	{ 	_text: 'IDS_COMPLAIN', _battleType: _battleType, _isInBattle: _isBattleStats,
+																_wantPraisePlayer: false, _evaluationLimitsComplain: evaluationLimitsComplain,
+																_playerName: name, _isInPBS: _isInPBS, _playerDbId: _playerDbId ? _playerDbId : entityAccountBattleDbId, _arenaId: _arenaId, _isInSameDivisionOnStart: isInSameDivisionOnStart, _complaintsAvailable: _complaintsAvailable,
+																_sortedBy: isEnemyPlayer ? 'team.enemy.complaint.sorted' : 'team.ally.complaint.sorted', 
+															 }"/>
+				</block>
+				<block>
+					<style>
+						<width value="100%"/>
+					</style>
+					<bind name="name" value="'id_praise'"/>
+					<bind name="instance" value="'PlayerMenuItemExpanded'; 	{ 	_text: 'IDS_PRAISE', _battleType: _battleType, _isInBattle: _isBattleStats, 
+																_wantPraisePlayer: true, _evaluationLimitsPraise: evaluationLimitsPraise,
+																_playerName: name, _isInPBS: _isInPBS, _playerDbId: _playerDbId ? _playerDbId : entityAccountBattleDbId, _arenaId: _arenaId, _isInSameDivisionOnStart: isInSameDivisionOnStart, _complaintsAvailable: _complaintsAvailable,
+																_sortedBy: isEnemyPlayer ? 'team.enemy.praise.sorted' : 'team.ally.praise.sorted'
+															 }"/>
+				</block>
+			</block>
+			<block>
+				<bind name="visible" value="_isBattleStats &amp;&amp; !isBot &amp;&amp; !isSuspended &amp;&amp; !isIgnored"/>
+				<bind name="watch" value="'playerMuteIdses'; isPlayerMessagesMuted 	? 'IDS_UNMUTE_PLAYER_CHAT'
+																	: 'IDS_MUTE_PLAYER_CHAT'"/>
+				<bind name="tooltip" value="'SimpleStatusTooltip'; {	_text: playerMuteIdses + '_HINT' }"/>
+				<bind name="name" value="'id_mute'"/>
+				<style>
+					<width value="100%"/>
+				</style>
+				<block className="dock_submenu_item" type="native">
+					<styleClass value="$FullsizeAbsolute"/>
+					<bind name="action" value="'buttonClick'; isPlayerMessagesMuted ? 'unmuteUser' : 'muteUser'; {id: _playerId}"/>
+				</block>
+				<block type="text">
+					<style>
+						<width value="100%"/>
+						<marginLeft value="7px"/>
+						<marginBottom value="3px"/>
+						<marginRight value="4px"/>
+						<leading value="-3"/>
+						<hitTest value="false"/>
+					</style>
+					<styleClass value="$TextDefault"/>
+					<bind name="text" value="playerMuteIdses"/>
+				</block>
+			</block>
+			<block>
+				<bind name="visible" value="(canBeInChat &amp;&amp; !(_isInPBS) &amp;&amp; !(isBot) &amp;&amp; !(isSuspended))"/>
+				<bind name="name" value="'id_mute_voice'"/>
+				<style>
+					<width value="100%"/>
+				</style>
+				<bind name="watch" value="'voiceChatMenuText'; 	!isInVoiceChat 		? 'IDS_PLAYER_IS_NOT_AVAILABLE_IN_VOICE_CHAT' :
+												isMuted				? 'IDS_UNMUTE_PLAYER_VOICE_CHAT'
+																	: 'IDS_MUTE_PLAYER_VOICE_CHAT'"/>
+				<bind name="watch" value="'state'; 	!isInVoiceChat		? 'disabled' :
+									isMuted				? 'muted'
+														: 'speak'"/>
+				<bind name="style" value="'alpha'; !isInVoiceChat	? 0.9 : 1"/>
+				<bind name="style" value="'hitTest'; isInVoiceChat"/>
+				<block className="dock_submenu_item" type="native">
+					<styleClass value="$FullsizeAbsolute"/>
+					<bind name="action" value="'buttonClick'; 'toggleVoice'; {playerName: pureName, nickName: name}"/>
+				</block>
+				<block>
+					<style>
+						<width value="100%"/>
+						<marginLeft value="7px"/>
+						<hitTest value="false"/>
+					</style>
+					<block type="text">
+						<style>
+							<width value="100%"/>
+							<marginBottom value="3px"/>
+							<hitTest value="false"/>
+							<marginRight value="4px"/>
+							<leading value="-3"/>
+						</style>
+						<styleClass value="$TextDefault"/>
+						<bind name="class" value="	!isInVoiceChat		? '$FontColorOrange' :
+									isMuted				? '$FontColorOrange'
+														: '$FontColorWhite'"/>
+						<bind name="text" value="voiceChatMenuText"/>
+					</block>
+					<block className="icon_voice_chat_small" type="native">
+						<style>
+							<marginTop value="6px"/>
+							<marginRight value="4px"/>
+						</style>
+						<bind name="gotoAndStop!" value="state"/>
+					</block>
+					<style>
+						<flow value="horizontal"/>
+					</style>
+				</block>
+			</block>
+			<block>
+				<bind name="visible" value="!(isSuspended) &amp;&amp; !(isBot) &amp;&amp; ((canBeInChat &amp;&amp; _isBattleLoading) || !_isBattleLoading)"/>
+				<style>
+					<width value="100%"/>
+					<marginTop value="3px"/>
+					<marginBottom value="2px"/>
+					<marginLeft value="-2px"/>
+					<marginRight value="-2px"/>
+				</style>
+				<block className="HorizontalDivider">
+					<styleClass value="$PxHorizontalCorrection"/>
+					<style>
+						<width value="100%"/>
+						<height value="2px"/>
+						<backgroundSize value="fill"/>
+						<marginTop value="1px"/>
+						<backgroundImage value="url:../service_kit/dividers/divider_h.png"/>
+					</style>
+				</block>
+			</block>
+			<bind name="firstEntityDH" value="'chatEntity'; CC.chat"/>
+			<bind name="collectionDH" value="CC.contactsGroup; 'contactsGroup'"/>
+			<bind name="var" value="{isChatServerAvailable: false}"/>
+			<bind name="watchDH" value="'isChatServerAvailable'; ['chatEntity.chat.evConnected', 'chatEntity.chat.evDisConnected']; chatEntity.chat.isConnected"/>
+			<block>
+				<bind name="visible" value="!(isBot) &amp;&amp; !(isSuspended)"/>
+				<style>
+					<backgroundColor value="0x01000000"/>
+					<width value="100%"/>
+				</style>
+				<bind name="style" value="'alpha'; isChatServerAvailable ? 1 : 0.5"/>
+				<bind name="tooltip" value="'SimpleStatusTooltip'; !(isChatServerAvailable) ? {_text: tr('IDS_CONTACT_DISABLE_REASON_SERVER_CHAT_DISABLED'), _unifiedStatus: SC.Ui_styles.UNIFIED_STATUS.WARNING} : null"/>
+				<block>
+					<styleClass value="$ContextMenuListItem"/>
+					<bind name="visible" value="((groupIdsOfAccount==null) &amp;&amp; !(isIgnored))"/>
+					<bind name="style" value="'hitTest';  isChatServerAvailable ? true : false"/>
+					<block className="MenuItem">
+						<styleClass value="$Fullsize"/>
+						<block className="dock_submenu_item" type="native">
+							<styleClass value="$FullsizeAbsolute"/>
+						</block>
+						<block type="text">
+							<styleClass value="$TextDefault"/>
+							<styleClass value="$MiddleVAligned"/>
+							<styleClass value="$ContextMenuListItemContent"/>
+							<bind name="text" value="'IDS_ADD_TO_CONTACTS'"/>
+							<bind name="name" value="'menu_item_' + _titleIds"/>
+						</block>
+					</block>
+					<bind name="action" value="'click'; 'addContact'; {dbId: accountDbId}"/>
+				</block>
+				<block>
+					<styleClass value="$ContextMenuListItem"/>
+					<bind name="visible" value="groupIdsOfAccount &amp;&amp; !isIgnored"/>
+					<bind name="style" value="'hitTest';  isChatServerAvailable ? true : false"/>
+					<block className="MenuItemWithAction">
+						<styleClass value="$Fullsize"/>
+						<block className="dock_submenu_item" type="native">
+							<styleClass value="$FullsizeAbsolute"/>
+						</block>
+						<block type="text">
+							<styleClass value="$TextDefault"/>
+							<styleClass value="$MiddleVAligned"/>
+							<styleClass value="$ContextMenuListItemContent"/>
+							<bind name="text" value="'IDS_REMOVE_FROM_CONTACTS'"/>
+						</block>
+						<bind name="action" value="'click'; 'removeContact'; {dbId: accountDbId}"/>
+					</block>
+				</block>
+				<block>
+					<bind name="visible" value="!(isIgnored) &amp;&amp; ((canAddGroupEntitiesId.length &gt; 0) &amp;&amp; (contactsGroup.length &gt; 1))"/>
+					<bind name="style" value="'hitTest'; isChatServerAvailable ? true : false"/>
+					<styleClass value="$ContextMenuListItem"/>
+					<block className="MenuItem">
+						<styleClass value="$Fullsize"/>
+						<block className="dock_submenu_item" type="native">
+							<styleClass value="$FullsizeAbsolute"/>
+						</block>
+						<block type="text">
+							<styleClass value="$TextDefault"/>
+							<styleClass value="$MiddleVAligned"/>
+							<styleClass value="$ContextMenuListItemContent"/>
+							<bind name="text" value="'IDS_ADD_TO_GROUP'"/>
+							<bind name="name" value="'menu_item_' + _titleIds"/>
+						</block>
+					</block>
+					<block className="button_expand_h" type="native">
+						<style>
+							<position value="absolute"/>
+							<right value="6px"/>
+						</style>
+						<styleClass value="$MouseDisable"/>
+						<styleClass value="$MiddleVAligned"/>
+					</block>
+					<bind name="tooltip" value="'MoveToGroupContextSubMenu'; {_entityAccountId: playerEntityId, canAddGroupEntitiesId: canAddGroupEntitiesId, _dropDown: false, _isInBattle: _isBattleStats}; 7"/>
+				</block>
+				<block>
+					<bind name="watch" value="'ignoreIdses'; (!isIgnored) ? 'IDS_IGNORE_PLAYER' : 'IDS_NOT_IGNORE_PLAYER'"/>
+					<bind name="tooltip" value="'SimpleStatusTooltip'; isChatServerAvailable	?	{ _text: ignoreIdses + '_HINT' }
+																			:	null"/>
+					<styleClass value="$ContextMenuListItem"/>
+					<bind name="style" value="'hitTest'; isChatServerAvailable ? true : false"/>
+					<block className="MenuItem">
+						<styleClass value="$Fullsize"/>
+						<block className="dock_submenu_item" type="native">
+							<styleClass value="$FullsizeAbsolute"/>
+						</block>
+						<block type="text">
+							<styleClass value="$TextDefault"/>
+							<styleClass value="$MiddleVAligned"/>
+							<styleClass value="$ContextMenuListItemContent"/>
+							<bind name="text" value="ignoreIdses"/>
+							<bind name="name" value="'menu_item_' + _titleIds"/>
+						</block>
+					</block>
+					<bind name="action" value="'click'; 'userIgnoreContact'; {dbId: accountDbId, ignore: !(isIgnored)}"/>
+				</block>
+				<bind name="watchDH" value="'clanId'; 	['selfPlayerEntity.clanman.evClanIdChanged']; selfPlayerEntity.clanman.clanId"/>
+				<bind name="watchDH" value="'role'; 		['selfPlayerEntity.clanman.evRoleChanged']; selfPlayerEntity.clanman.role"/>
+				<bind name="watchDH" value="'isFull'; 	['clanEntity.clanExtended.evIsFullChanged']; clanEntity.clanExtended.isFull"/>
+				<bind name="primaryEntityDH" value="'clanEntity'; CC.clan; clanId"/>
+				<bind name="watchDH" value="'clanTag'; ['clanEntity.clan.evTagChanged']; clanEntity.clan.tag"/>
+				<bind name="watchDH" value="'clanName'; ['clanEntity.clanExtended.evNameChanged']; clanEntity.clanExtended.name"/>
+				<bind name="watch" value="'haveOwnClan'; 			clanEntity != null"/>
+				<bind name="watch" value="'canInvite'; 				(role == 'executive_officer' || role == 'recruitment_officer' || role == 'commander')"/>
+				<bind name="watch" value="'alreadyInYourClan'; 		(playerEntity.clanman != null) &amp;&amp; (playerEntity.clanman.clanId == selfPlayerEntity.clanman.clanId)"/>
+				<bind name="watch" value="'alreadyInAnotherClan'; 	(playerEntity.clanman != null) &amp;&amp; (playerEntity.clanman.clanId != selfPlayerEntity.clanman.clanId)"/>
+				<bind name="watch" value="'noFreePlacesInClan'; 		isFull"/>
+				<block>
+					<bind name="visible" value="(haveOwnClan &amp;&amp; canInvite &amp;&amp; !alreadyInYourClan)"/>
+					<bind name="action" value="'click'; 'ClanProxy.sendInvite'; { playerDBID: accountDbId }"/>
+					<bind name="style" value="'alpha'; (alreadyInAnotherClan || noFreePlacesInClan) ? 0.5 : 1"/>
+					<bind name="tooltip" value="'SimpleStatusTooltip'; (alreadyInAnotherClan || noFreePlacesInClan)	? {	_text: 	noFreePlacesInClan 		? 'IDS_CLAN_INVITATION_DENY_REASON_CLAN_IS_FULL':
+																												alreadyInAnotherClan 	? 'IDS_CLAN_INVITATION_DENY_REASON_PLAYER_ALREADY_IN_CLAN'
+																																		: '',
+																										_unifiedStatus: SC.Ui_styles.UNIFIED_STATUS.WARNING} 
+																									: null"/>
+					<style>
+						<backgroundColor value="0x01000000"/>
+					</style>
+					<styleClass value="$ContextMenuListItem"/>
+					<block>
+						<styleClass value="$Fullsize"/>
+						<block className="MenuItem">
+							<styleClass value="$Fullsize"/>
+							<block className="dock_submenu_item" type="native">
+								<styleClass value="$FullsizeAbsolute"/>
+							</block>
+							<block type="text">
+								<styleClass value="$TextDefault"/>
+								<styleClass value="$MiddleVAligned"/>
+								<styleClass value="$ContextMenuListItemContent"/>
+								<bind name="text" value="'IDS_INVITATION_TO_CLAN'"/>
+								<bind name="name" value="'menu_item_' + _titleIds"/>
+							</block>
+						</block>
+						<bind name="style" value="'hitTest'; (alreadyInAnotherClan || noFreePlacesInClan) ? false : true"/>
+					</block>
+				</block>
+				<block>
+					<params>
+						<param name="name" value="id_profile"/>
+					</params>
+					<bind name="visible" value="_isInPBS"/>
+					<styleClass value="$ContextMenuListItem"/>
+					<block className="MenuItem">
+						<styleClass value="$Fullsize"/>
+						<block className="dock_submenu_item" type="native">
+							<styleClass value="$FullsizeAbsolute"/>
+						</block>
+						<block type="text">
+							<styleClass value="$TextDefault"/>
+							<styleClass value="$MiddleVAligned"/>
+							<styleClass value="$ContextMenuListItemContent"/>
+							<bind name="text" value="'IDS_PROFILE'"/>
+							<bind name="name" value="'menu_item_' + _titleIds"/>
+						</block>
+					</block>
+					<bind name="action" value="'click'; 'navigateTo'; {	route: SC.Ui_windows.ROUTE.PORTAL,
+														data: {url: SC.Ui_windows.GUI_URL.PLAYER_STATS, accountId: accountDbId + ''}}"/>
+				</block>
+			</block>
+		</block>
+		<block>
+			<bind name="visible" value="isBot || isSuspended"/>
+			<style>
+				<width value="100%"/>
+			</style>
+			<block type="text">
+				<style>
+					<width value="100%"/>
+					<marginLeft value="7px"/>
+					<marginBottom value="3px"/>
+					<hitTest value="false"/>
+					<marginRight value="4px"/>
+					<leading value="-3"/>
+					<alpha value="0.7"/>
+				</style>
+				<styleClass value="$TextDefault"/>
+				<bind name="text" value="'IDS_NO_AVAILABLE_ACTIONS'"/>
+				<bind name="name" value="'noAvailableActionLabel'"/>
+			</block>
+		</block>
+	</block>
+
+</ui>	
